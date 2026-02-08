@@ -64,19 +64,27 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
       
-          git fetch origin ci-output || true
-          git checkout -B ci-output
+          # Create branch from scratch (no workflows)
+          git checkout --orphan ci-output
       
+          # Remove everything from index
+          git reset --hard
+      
+          # Remove workflow files explicitly
+          rm -rf .github || true
+      
+          # Ensure output exists
           mkdir -p output
       
           FILE_COUNT=$(find output -type f | wc -l)
       
           if [ "$FILE_COUNT" -gt 0 ]; then
             git add output
-            git commit -m "Add CI-generated output images" || echo "Nothing to commit"
-            git push origin ci-output
+            git commit -m "Add CI-generated output images"
+            git push -f origin ci-output
           else
             echo "No output files found. Skipping commit."
           fi
+
 
 
