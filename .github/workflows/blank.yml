@@ -35,21 +35,26 @@ jobs:
           pip install -r requirements.txt
           pip install pytest opencv-python-headless numpy
 
-      # 4. Run tests
+      # 4. Ensure output folder exists
+      - name: Ensure output folder exists
+        run: |
+          mkdir -p output
+
+      # 5. Run tests
       - name: Run pytest and generate outputs
         run: |
           TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
           mkdir -p output/$TIMESTAMP
           pytest -v tests/ --capture=no
 
-      # 5. Upload outputs as artifact (optional)
+      # 6. Upload outputs as artifact (optional)
       - name: Upload output artifacts
         uses: actions/upload-artifact@v4
         with:
           name: output-images
           path: output/
 
-      # 6. Push output images to 'ci-output' branch
+      # 7. Push output images to 'ci-output' branch
       - name: Push outputs to 'ci-output' branch
         run: |
           git config --global user.name "github-actions[bot]"
