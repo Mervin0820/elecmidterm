@@ -1,5 +1,8 @@
 name: Python OpenCV CI
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: ["main"]
@@ -60,20 +63,18 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
       
-          # Create or switch to ci-output branch
           git fetch origin ci-output || true
           git checkout -B ci-output
       
-          # Ensure output directory exists
           mkdir -p output
       
-          # Only add and commit if output contains files
-          if [ "$(ls -A output 2>/dev/null)" ]; then
-            git add output/
+          FILE_COUNT=$(find output -type f | wc -l)
+      
+          if [ "$FILE_COUNT" -gt 0 ]; then
+            git add output
             git commit -m "Add CI-generated output images" || echo "Nothing to commit"
-            git push "https://${{ secrets.PAT_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" ci-output
+            git push origin ci-output
           else
-            echo "No output files to commit"
+            echo "No output files found. Skipping commit."
           fi
-        env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+
