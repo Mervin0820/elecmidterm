@@ -24,7 +24,7 @@ class TestBrighten:
             cv2.imwrite(os.path.join(self.test_input_dir, "dummy.jpg"), dummy_img)
         yield
         # Optional cleanup: delete output folder after tests
-        shutil.rmtree(self.test_output_dir)
+        
 
     def test_apply_clahe_valid_image(self):
         filenames = [f for f in os.listdir(self.test_input_dir) if f.lower().endswith(('.jpg', '.png', '.jpeg'))]
