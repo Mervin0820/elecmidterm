@@ -59,18 +59,21 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
+      
           # Create or switch to ci-output branch
-          git fetch origin ci-output:ci-output || true
+          git fetch origin ci-output || true
           git checkout -B ci-output
-
-          # Add all outputs
-          git add output/
-
-          # Commit only if there are changes
-          git diff --cached --quiet || git commit -m "Add CI-generated output images"
-
-          # Push using repo-scoped PAT
-          git push "https://${{ secrets.PAT_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" ci-output
+      
+          # Ensure output directory exists
+          mkdir -p output
+      
+          # Only add and commit if output contains files
+          if [ "$(ls -A output 2>/dev/null)" ]; then
+            git add output/
+            git commit -m "Add CI-generated output images" || echo "Nothing to commit"
+            git push "https://${{ secrets.PAT_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" ci-output
+          else
+            echo "No output files to commit"
+          fi
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
