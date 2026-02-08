@@ -29,7 +29,7 @@ class TestCartoonify:
 
         yield
         # Cleanup output folder after tests
-        shutil.rmtree(self.test_output_dir)
+        
 
     def test_cartoonify_valid_image(self):
         # Test processing real images

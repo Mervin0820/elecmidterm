@@ -29,7 +29,7 @@ class TestSlowShutter:
 
         yield
         # Cleanup output folder after tests
-        shutil.rmtree(self.test_output_dir)
+       
 
     def test_apply_slow_shutter_valid_image(self):
         filenames = [f for f in os.listdir(self.test_input_dir) if f.lower().endswith(('.jpg', '.png', '.jpeg'))]
