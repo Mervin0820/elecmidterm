@@ -1,7 +1,5 @@
 name: Python OpenCV CI
 
-permissions:
-  contents: write
 
 on:
   push:
