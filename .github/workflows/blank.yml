@@ -59,6 +59,7 @@ jobs:
 
       # 7. Push output images to 'ci-output' branch
       - name: Push outputs to 'ci-output' branch
+        if: github.event_name == 'push'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -77,4 +78,5 @@ jobs:
           else
             echo "No output files found. Skipping commit."
           fi
+
 
